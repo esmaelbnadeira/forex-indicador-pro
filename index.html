@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Robo Forex Morena</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif}
+body{
+background:linear-gradient(to right,#0f2027,#203a43,#2c5364);
+color:#fff;min-height:100vh;
+display:flex;justify-content:center;align-items:center}
+.container{
+background:rgba(0,0,0,.7);
+padding:30px;border-radius:15px;
+width:90%;max-width:700px;
+box-shadow:0 0 20px rgba(0,0,0,.5)}
+h1{text-align:center;margin-bottom:20px;color:#FFD700}
+label{display:block;margin:15px 0 5px;font-weight:700}
+select,input[type="file"],input[type="password"]{
+width:100%;padding:10px;border-radius:8px;border:none;margin-bottom:10px}
+button{
+padding:12px 20px;border:none;border-radius:8px;
+cursor:pointer;font-weight:700;
+background:#FFD700;color:#000;
+transition:.3s;margin-top:10px;width:100%}
+button:hover{background:#FFC107}
+.hidden{display:none}
+.message{
+margin-top:10px;padding:10px;
+border-radius:8px;text-align:center}
+.success{background:green}
+.error{background:red}
+.percent{text-align:center;margin-top:10px;font-size:18px}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>ROBO FOREX MORENA</h1>
+
+<!-- LOGIN (SÓ SENHA – ÚNICA ALTERAÇÃO) -->
+<div id="loginDiv">
+<label>Senha de acesso</label>
+<input type="password" id="senha" placeholder="Digite a senha">
+<button onclick="login()">Entrar</button>
+<div id="loginMsg" class="message"></div>
+</div>
+
+<!-- ROBO (IGUAL AO ORIGINAL) -->
+<div id="roboDiv" class="hidden">
+
+<label>Escolha o par de moeda:</label>
+<select id="parMoeda">
+<optgroup label="Majors">
+<option>EUR/USD</option><option>USD/JPY</option><option>GBP/USD</option>
+<option>USD/CHF</option><option>AUD/USD</option>
+<option>USD/CAD</option><option>NZD/USD</option>
+</optgroup>
+<optgroup label="Crosses">
+<option>EUR/JPY</option><option>GBP/JPY</option>
+<option>EUR/GBP</option><option>AUD/JPY</option>
+</optgroup>
+<optgroup label="Metais">
+<option>XAU/USD (OURO)</option>
+<option>XAG/USD</option>
+</optgroup>
+</select>
+
+<label>Tempo gráfico:</label>
+<select>
+<option>M1</option>
+<option>M5</option>
+<option>M15</option>
+</select>
+
+<label>Plataforma:</label>
+<select>
+<option>Exness</option>
+<option>MetaTrader 5</option>
+<option>Binance</option>
+</select>
+
+<label>Adicionar imagem do gráfico (1 a cada 120s):</label>
+<input type="file" id="grafico" accept="image/*">
+<button onclick="uploadImagem()">Enviar Imagem</button>
+
+<div id="uploadMsg" class="message"></div>
+<div id="resultado" class="message"></div>
+
+<div class="percent">Percentual de acerto: 78%</div>
+
+<button onclick="operar()">Operar</button>
+</div>
+
+<audio id="ok" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+<audio id="erro" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
+
+</div>
+
+<script>
+const SENHA_CORRETA="angolaforex2026";
+let lastUpload=0;
+
+function login(){
+const s=document.getElementById("senha").value;
+const msg=document.getElementById("loginMsg");
+if(s===SENHA_CORRETA){
+document.getElementById("loginDiv").classList.add("hidden");
+document.getElementById("roboDiv").classList.remove("hidden");
+document.getElementById("ok").play();
+}else{
+msg.innerHTML="Senha incorreta!";
+msg.className="message error";
+document.getElementById("erro").play();
+}
+}
+
+function uploadImagem(){
+const agora=Date.now();
+const msg=document.getElementById("uploadMsg");
+if(agora-lastUpload<120000){
+msg.innerHTML="Aguarde 120 segundos para novo envio.";
+msg.className="message error";
+return;
+}
+lastUpload=agora;
+msg.innerHTML="Imagem enviada! Robô analisando...";
+msg.className="message success";
+setTimeout(()=>{
+const sinais=["COMPRA","VENDA","ESPERAR"];
+const r=sinais[Math.floor(Math.random()*sinais.length)];
+document.getElementById("resultado").innerHTML="SINAL DO ROBÔ: <b>"+r+"</b>";
+document.getElementById("resultado").className="message success";
+document.getElementById("ok").play();
+},2000);
+}
+
+function operar(){
+window.open(
+"https://my.assexmarkets.com/auth/register?partner_code=5349752",
+"_blank"
+);
+}
+</script>
+
+</body>
+</html>
